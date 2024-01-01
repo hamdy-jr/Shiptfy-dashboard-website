@@ -1,0 +1,31 @@
+<!--  Upload Photo Modal-->
+@if (isUploadPhotoModalOpen){
+
+<app-add-photo-model
+  (isUploadPhotoModalOpen)="closeUploadPhotoModal($event)"
+  (updateVirtualExpoPosts)="updateVirtualExpoPosts($event)"
+></app-add-photo-model
+>}
+<div class="container px-6 mx-auto grid">
+  <h3 class="text-2xl font-medium text-gray-700 py-5 dark:text-gray-200">
+    360 Panorama
+  </h3>
+  <div>
+    <div class="flex flex-row justify-between my-3 items-center">
+      <h4 class="font-semibold text-gray-800 dark:text-gray-300">Preview</h4>
+      <button
+        (click)="openUploadPhotoModal()"
+        class="px-3 py-1 mr-2 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple"
+      >
+        Upload Photo
+      </button>
+    </div>
+    <div class="grid gap-6 mb-8 md:grid-cols-2">
+      <div *ngFor="let virtual of virtualExpoPosts()">
+        <div class="min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
+          <app-panorama-viewer [virtualExpo]="virtual"></app-panorama-viewer>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

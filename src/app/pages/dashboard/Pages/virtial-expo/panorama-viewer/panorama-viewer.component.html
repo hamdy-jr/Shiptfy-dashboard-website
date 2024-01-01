@@ -1,0 +1,24 @@
+<!--<canvas #canvas></canvas>-->
+<figure
+  (click)="openPreview()"
+  class="relative transition-all duration-300 cursor-pointer filter w-full"
+>
+  <div>
+    <img
+      class="rounded-lg w-full"
+      [src]="virtualExpo.photos[0].photoUrl"
+      [alt]="virtualExpo.photos[0].title"
+    />
+  </div>
+  <figcaption class="absolute px-4 text-lg text-white bottom-6">
+    <p>
+      {{ virtualExpo.photos[0].caption }}
+    </p>
+  </figcaption>
+</figure>
+@if (openPhotoPreview){
+<app-panorama-preview
+  (openPhotoPreview)="closePreview($event)"
+  [virtualExpo]="virtualExpo"
+></app-panorama-preview>
+}

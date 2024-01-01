@@ -1,0 +1,426 @@
+<form>
+  <ng-container [formGroup]="registrationForm">
+    <router-outlet></router-outlet>
+  </ng-container>
+</form>
+<!--<div class="">-->
+<!--  <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">-->
+<!--    <div class="sm:mx-auto sm:w-full sm:max-w-sm">-->
+<!--      <h2-->
+<!--        class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-[#323232]"-->
+<!--      >-->
+<!--        Create new account-->
+<!--      </h2>-->
+<!--    </div>-->
+
+<!--    <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-xl">-->
+<!--      <form-->
+<!--        class="space-y-6"-->
+<!--        [formGroup]="registrationForm"-->
+<!--        (ngSubmit)="onSubmit()"-->
+<!--      >-->
+<!--        <div class="flex flex-row justify-between gap-3">-->
+<!--          <div class="w-full">-->
+<!--            <label-->
+<!--              for="first-name"-->
+<!--              class="block mb-2 text-sm font-medium text-gray-900"-->
+<!--              >First Name</label-->
+<!--            >-->
+<!--            <div class="mt-2">-->
+<!--              <input-->
+<!--                id="first-name"-->
+<!--                name="first-name"-->
+<!--                type="text"-->
+<!--                formControlName="nameFirst"-->
+<!--                required-->
+<!--                class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-700 block w-full p-2.5"-->
+<!--              />-->
+<!--              <span class="mt-2 text-sm text-red-500 pl-2">-->
+<!--                Please enter a valid Name</span-->
+<!--              >-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="w-full">-->
+<!--            <label-->
+<!--              for="last-name"-->
+<!--              class="block mb-2 text-sm font-medium text-gray-900"-->
+<!--              >Last Name</label-->
+<!--            >-->
+<!--            <div class="mt-2">-->
+<!--              <input-->
+<!--                id="last-name"-->
+<!--                name="last-name"-->
+<!--                type="text"-->
+<!--                formControlName="nameLast"-->
+<!--                required-->
+<!--                class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-700 block w-full p-2.5"-->
+<!--              />-->
+<!--              <span class="mt-2 text-sm text-red-500 pl-2">-->
+<!--                Please enter a valid Name</span-->
+<!--              >-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div>-->
+<!--          <label-->
+<!--            for="email"-->
+<!--            class="block mb-2 text-sm font-medium text-gray-900"-->
+<!--            >Email address</label-->
+<!--          >-->
+<!--          <div class="mt-2">-->
+<!--            <input-->
+<!--              id="email"-->
+<!--              name="email"-->
+<!--              type="email"-->
+<!--              formControlName="email"-->
+<!--              required-->
+<!--              class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-700 block w-full p-2.5"-->
+<!--            />-->
+<!--            <span class="mt-2 text-sm text-red-500 pl-2">-->
+<!--              Please enter a valid email address</span-->
+<!--            >-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div>-->
+<!--          <div class="flex items-center justify-between">-->
+<!--            <label-->
+<!--              for="password"-->
+<!--              class="block mb-2 text-sm font-medium text-gray-900"-->
+<!--              >Password</label-->
+<!--            >-->
+<!--          </div>-->
+<!--          <div class="mt-2">-->
+<!--            <input-->
+<!--              id="password"-->
+<!--              name="password"-->
+<!--              type="password"-->
+<!--              formControlName="password"-->
+<!--              autocomplete="current-password"-->
+<!--              required-->
+<!--              class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-700 block w-full p-2.5"-->
+<!--            />-->
+<!--            <span class="mt-2 text-sm text-red-500 pl-2">-->
+<!--              Please enter a valid password-->
+<!--            </span>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div>-->
+<!--          <div class="flex items-center justify-between">-->
+<!--            <label-->
+<!--              for="phone-number"-->
+<!--              class="block mb-2 text-sm font-medium text-gray-900"-->
+<!--              >Phone Number</label-->
+<!--            >-->
+<!--          </div>-->
+<!--          <div class="relative mt-2.5">-->
+<!--            <div class="absolute inset-y-0 left-0 flex items-center">-->
+<!--              <select-->
+<!--                id="phoneNumber-Code"-->
+<!--                name="phoneNumber-Code"-->
+<!--                class="bg-gray-50 border border-gray-300 border-r-0 text-gray-900 text-sm rounded-lg block w-full p-2.5"-->
+<!--                formControlName="phoneNumberCode"-->
+<!--              >-->
+<!--                <option [value]="countries[0].phoneCode">+20</option>-->
+<!--              </select>-->
+<!--            </div>-->
+<!--            <input-->
+<!--              type="tel"-->
+<!--              name="phone-number"-->
+<!--              id="phone-number"-->
+<!--              formControlName="phoneNumber"-->
+<!--              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 pl-20"-->
+<!--            />-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="flex flex-row justify-between gap-3">-->
+<!--          <div class="w-[25%]">-->
+<!--            <label-->
+<!--              for="gender"-->
+<!--              class="block mb-2 text-sm font-medium text-gray-900"-->
+<!--              >Gender</label-->
+<!--            >-->
+<!--            <div class="mt-2">-->
+<!--              <select-->
+<!--                id="gender"-->
+<!--                name="gender"-->
+<!--                formControlName="gender"-->
+<!--                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"-->
+<!--              >-->
+<!--                <option>none</option>-->
+<!--                <option>Male</option>-->
+<!--                <option>Female</option>-->
+<!--              </select>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="w-full">-->
+<!--            <label-->
+<!--              for="field"-->
+<!--              class="block mb-2 text-sm font-medium text-gray-900"-->
+<!--              >Field</label-->
+<!--            >-->
+<!--            <div class="mt-2">-->
+<!--              <select-->
+<!--                id="field"-->
+<!--                name="field"-->
+<!--                formControlName="field"-->
+<!--                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"-->
+<!--              >-->
+<!--                <option>&#45;&#45;</option>-->
+<!--                <option value="offshore">Offshore</option>-->
+<!--                <option value="shipping">Shipping</option>-->
+<!--                <option value="oilAndGas">Oil And Gas</option>-->
+<!--                <option value="ports">Ports</option>-->
+<!--                <option value="trainingAndEducation">-->
+<!--                  Training And Education-->
+<!--                </option>-->
+<!--                <option value="classification">Classification</option>-->
+<!--                <option value="legalAffairs">Legal Affairs</option>-->
+<!--                <option value="safetyAndSecurity">Safety And Security</option>-->
+<!--                <option value="engineering">Engineering</option>-->
+<!--                <option value="shipyard">Shipyard</option>-->
+<!--              </select>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div>-->
+<!--          <label for="bio" class="block mb-2 text-sm font-medium text-gray-900"-->
+<!--            >Bio</label-->
+<!--          >-->
+<!--          <div class="mt-2">-->
+<!--            <input-->
+<!--              id="bio"-->
+<!--              name="bio"-->
+<!--              formControlName="bio"-->
+<!--              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"-->
+<!--            />-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div>-->
+<!--          <label-->
+<!--            for="jobTitle"-->
+<!--            class="block mb-2 text-sm font-medium text-gray-900"-->
+<!--            >Job Title</label-->
+<!--          >-->
+<!--          <div class="mt-2">-->
+<!--            <input-->
+<!--              id="jobTitle"-->
+<!--              name="jobTitle"-->
+<!--              formControlName="jobTitle"-->
+<!--              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"-->
+<!--            />-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div>-->
+<!--          <label-->
+<!--            for="website"-->
+<!--            class="block mb-2 text-sm font-medium text-gray-900"-->
+<!--            >Website</label-->
+<!--          >-->
+<!--          <div class="mt-2">-->
+<!--            <input-->
+<!--              id="website"-->
+<!--              name="website"-->
+<!--              formControlName="website"-->
+<!--              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"-->
+<!--            />-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div>-->
+<!--          <label-->
+<!--            for="linkedIn"-->
+<!--            class="block mb-2 text-sm font-medium text-gray-900"-->
+<!--            >LinkedIn</label-->
+<!--          >-->
+<!--          <div class="mt-2">-->
+<!--            <input-->
+<!--              id="linkedIn"-->
+<!--              name="linkedIn"-->
+<!--              formControlName="linkedIn"-->
+<!--              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"-->
+<!--            />-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="flex flex-row justify-between gap-3">-->
+<!--          <div class="w-full">-->
+<!--            <label-->
+<!--              for="country"-->
+<!--              class="block mb-2 text-sm font-medium text-gray-900"-->
+<!--              >Countries</label-->
+<!--            >-->
+<!--            <div class="mt-2">-->
+<!--              <select-->
+<!--                id="country"-->
+<!--                name="country"-->
+<!--                formControlName="countryId"-->
+<!--                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"-->
+<!--                (change)="onSelectCountry(registrationForm.value.countryId)"-->
+<!--              >-->
+<!--                <option *ngFor="let country of countries" [value]="country.id">-->
+<!--                  {{ country.name }}-->
+<!--                </option>-->
+<!--              </select>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="w-full">-->
+<!--            <label-->
+<!--              for="cities"-->
+<!--              class="block mb-2 text-sm font-medium text-gray-900"-->
+<!--              >Cities</label-->
+<!--            >-->
+<!--            <div class="mt-2">-->
+<!--              <select-->
+<!--                id="cities"-->
+<!--                name="cities"-->
+<!--                formControlName="cityId"-->
+<!--                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"-->
+<!--                (change)="onSelectCity(registrationForm.value.cityId)"-->
+<!--              >-->
+<!--                <option *ngFor="let city of cities" [value]="city.id">-->
+<!--                  {{ city.name }}-->
+<!--                </option>-->
+<!--              </select>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--          <div class="w-full">-->
+<!--            <label-->
+<!--              for="areas"-->
+<!--              class="block mb-2 text-sm font-medium text-gray-900"-->
+<!--              >Areas</label-->
+<!--            >-->
+<!--            <div class="mt-2">-->
+<!--              <select-->
+<!--                id="areas"-->
+<!--                name="areas"-->
+<!--                formControlName="areaId"-->
+<!--                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"-->
+<!--              >-->
+<!--                <option *ngFor="let area of areas" [value]="area.id">-->
+<!--                  {{ area.name }}-->
+<!--                </option>-->
+<!--              </select>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--        <div class="col-span-full">-->
+<!--          <label-->
+<!--            for="address"-->
+<!--            class="block mb-2 text-sm font-medium text-gray-900"-->
+<!--            >Address</label-->
+<!--          >-->
+<!--          <div class="mt-2 flex items-center gap-x-3">-->
+<!--            <input-->
+<!--              id="address"-->
+<!--              name="address"-->
+<!--              formControlName="address"-->
+<!--              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"-->
+<!--            />-->
+<!--          </div>-->
+<!--        </div>-->
+
+<!--        <div class="col-span-full">-->
+<!--          <label class="image-upload-container btn btn-bwm">-->
+<!--            <span>Select Image</span>-->
+<!--            <input-->
+<!--              type="file"-->
+<!--              formControlName="avatar"-->
+<!--              (change)="onFileSelected($event)"-->
+<!--            />-->
+<!--          </label>-->
+<!--        </div>-->
+
+<!--        <div>-->
+<!--          <h3 class="mb-5 text-lg font-medium text-gray-900 text-center">-->
+<!--            Select Your Subscription Plan-->
+<!--          </h3>-->
+<!--          <ul-->
+<!--            class="grid w-full gap-6 items-center justify-center"-->
+<!--            *ngFor="let sub of subscriptionPackages"-->
+<!--          >-->
+<!--            <li class="w-full">-->
+<!--              <input-->
+<!--                type="radio"-->
+<!--                id="subscriptionPackage"-->
+<!--                name="subscriptionPackageId"-->
+<!--                [value]="sub.id"-->
+<!--                formControlName="subscriptionPackageId"-->
+<!--                class="hidden peer"-->
+<!--              />-->
+<!--              <label-->
+<!--                for="subscriptionPackage"-->
+<!--                class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100"-->
+<!--              >-->
+<!--                <div class="">-->
+<!--                  <h5-->
+<!--                    class="mb-2 text-xl font-medium text-gray-500 text-center"-->
+<!--                  >-->
+<!--                    {{ sub.name }}-->
+<!--                  </h5>-->
+<!--                  <h5-->
+<!--                    class="mb-4 font-medium text-xs text-gray-500 text-center"-->
+<!--                  >-->
+<!--                    Select Purchase Options-->
+<!--                  </h5>-->
+<!--                  <div class="flex flex-col items-center ps-4 rounded gap-4">-->
+<!--                    <div *ngFor="let option of sub.purchaseOptions">-->
+<!--                      <input-->
+<!--                        checked-->
+<!--                        type="radio"-->
+<!--                        [id]="option.id"-->
+<!--                        [value]="option.id"-->
+<!--                        name="subscriptionPackagePurchaseOptionId"-->
+<!--                        formControlName="subscriptionPackagePurchaseOptionId"-->
+<!--                        class="w-4 h-4 text-blue-600 bg-gray-100"-->
+<!--                      />-->
+<!--                      <label-->
+<!--                        class="w-full py-4 ms-2 text-sm font-medium text-gray-900"-->
+<!--                        [for]="option.id"-->
+<!--                      >-->
+<!--                        <span class="text-xl font-semibold">$</span>-->
+<!--                        <span class="text-3xl font-extrabold tracking-tight">{{-->
+<!--                          option.originalPrice-->
+<!--                        }}</span>-->
+<!--                        <span class="ms-1 text-xl font-normal text-gray-500"-->
+<!--                          >/{{ option.name }}</span-->
+<!--                        ></label-->
+<!--                      >-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                  <ul-->
+<!--                    class="space-y-5 my-7"-->
+<!--                    *ngFor="let feature of sub.features"-->
+<!--                  >-->
+<!--                    <li class="flex decoration-gray-500 items-center">-->
+<!--                      <svg-->
+<!--                        class="flex-shrink-0 w-4 h-4 text-blue-600"-->
+<!--                        aria-hidden="true"-->
+<!--                        xmlns="http://www.w3.org/2000/svg"-->
+<!--                        fill="currentColor"-->
+<!--                        viewBox="0 0 20 20"-->
+<!--                      >-->
+<!--                        <path-->
+<!--                          d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"-->
+<!--                        />-->
+<!--                      </svg>-->
+<!--                      <span-->
+<!--                        class="text-base font-normal leading-tight text-gray-500 ms-3"-->
+<!--                        >{{ feature.name }}</span-->
+<!--                      >-->
+<!--                    </li>-->
+<!--                  </ul>-->
+<!--                </div>-->
+<!--              </label>-->
+<!--            </li>-->
+<!--          </ul>-->
+<!--        </div>-->
+<!--        <div>-->
+<!--          <button-->
+<!--            type="submit"-->
+<!--            class="flex w-full justify-center text-white rounded-md bg-[#323232] px-3 py-1.5 text-sm font-semibold leading-6 shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"-->
+<!--          >-->
+<!--            Register-->
+<!--          </button>-->
+<!--        </div>-->
+<!--      </form>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
