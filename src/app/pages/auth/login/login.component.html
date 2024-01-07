@@ -34,8 +34,7 @@
               *ngIf="
                 loginForm.controls.identifier.invalid &&
                 (loginForm.controls.identifier.dirty ||
-                  loginForm.controls.identifier.touched ||
-                  isSubmitted)
+                  loginForm.controls.identifier.touched)
               "
               class="text-xs p-1 text-red-600 dark:text-red-400"
             >
@@ -60,8 +59,7 @@
               *ngIf="
                 loginForm.controls['password'].invalid &&
                 (loginForm.controls['password'].dirty ||
-                  loginForm.controls['password'].touched ||
-                  isSubmitted)
+                  loginForm.controls['password'].touched)
               "
               class="text-xs text-red-600 dark:text-red-400"
             >

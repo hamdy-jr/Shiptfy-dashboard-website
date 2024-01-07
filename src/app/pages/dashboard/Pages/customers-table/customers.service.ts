@@ -26,19 +26,22 @@ export class CustomersService {
       .getDashboardViewPage(index, size, search, status, gender)
       .pipe(
         map((data: IndexPageOfCustomerDashboardView) => {
-          return data.items.map((item: CustomerDashboardView) => {
-            return {
-              ...item,
-              dateFirstOrder: new Date(
-                item.dateFirstOrder as string,
-              ).toLocaleString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                timeZone: 'UTC',
-              }),
-            };
-          });
+          return {
+            ...data,
+            items: data.items.map((item: CustomerDashboardView) => {
+              return {
+                ...item,
+                dateFirstOrder: new Date(
+                  item.dateFirstOrder as string,
+                ).toLocaleString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                  timeZone: 'UTC',
+                }),
+              };
+            }),
+          };
         }),
       );
   }

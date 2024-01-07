@@ -8,7 +8,6 @@ import { RouterOutlet } from '@angular/router';
   standalone: true,
   imports: [SideBarComponent, HeaderComponent, RouterOutlet],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardComponent {}

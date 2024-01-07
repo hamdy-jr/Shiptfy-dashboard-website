@@ -7,8 +7,7 @@
       <div class="flex flex-row justify-between gap-8 pb-2">
         <div>
           <select
-            [formControl]="subscriptionRequestStatusControl"
-            (change)="getSubscriptionRequests()"
+            [formControl]="status"
             class="block text-sm dark:text-gray-300 dark:border-gray-600 dark:bg-gray-700 form-select focus:border-purple-400 focus:outline-none focus:shadow-outline-purple dark:focus:shadow-outline-gray"
           >
             <option [value]="null">All Status</option>
@@ -37,65 +36,98 @@
             <th class="px-4 py-3">Actions</th>
           </tr>
         </thead>
-        <tbody
-          class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800"
-          *ngFor="let subs of subscriptionRequests()"
-        >
-          <tr class="text-gray-700 dark:text-gray-400">
-            <td class="px-4 py-3">
-              <div class="font-semibold text-sm">
-                {{ subs.billing.name | titlecase }}
-              </div>
-            </td>
-            <td class="px-4 py-3">
-              <div class="font-semibold text-sm">
-                {{ subs.subscriptionPackage.name | titlecase }}
-              </div>
-            </td>
-            <td class="px-4 py-3">
-              <div class="font-semibold text-sm">
-                {{
-                  subs.subscriptionPackage.purchaseOption.billingSchedule
-                    | titlecase
-                }}
-              </div>
-            </td>
-            <td class="px-4 py-3">
-              <div class="font-semibold text-sm">
-                {{
-                  subs.subscriptionPackage.purchaseOption.currentPrice
-                    | currency
-                }}
-              </div>
-            </td>
-            <td class="px-4 py-3 text-xs">
-              <span
-                [ngClass]="subs.status === 'approved' ? 'bg-green-600' : ''"
-                class="px-2 py-1 font-semibold leading-tight text-green-100 bg-[#d03801] rounded-full"
-              >
-                {{ subs.status | titlecase }}
-              </span>
-            </td>
-            <td class="px-4 py-3">
-              <div class="flex items-center space-x-4 text-sm">
-                <button
-                  type="button"
-                  [ngClass]="subs.status === 'approved' ? 'opacity-50' : ''"
-                  [disabled]="subs.status === 'approved' ? true : false"
-                  (click)="
-                    approve(
-                      subs.id,
-                      subs.subscriptionPackage.id,
-                      subs.subscriptionPackage.purchaseOption.id
-                    )
-                  "
-                  class="px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-green-800 border border-transparent rounded-md active:bg-green-600 hover:bg-green-700 focus:outline-none focus:shadow-outline-purple"
+        <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+          <ng-container
+            *ngIf="
+              subscriptionRequests$ | async as subscriptionRequests;
+              else loadingOrError
+            "
+          >
+            <tr
+              class="text-gray-700 dark:text-gray-400"
+              *ngFor="let subs of subscriptionRequests"
+            >
+              <td class="px-4 py-3">
+                <div class="font-semibold text-sm">
+                  {{ subs.billing.name | titlecase }}
+                </div>
+              </td>
+              <td class="px-4 py-3">
+                <div class="font-semibold text-sm">
+                  {{ subs.subscriptionPackage.name | titlecase }}
+                </div>
+              </td>
+              <td class="px-4 py-3">
+                <div class="font-semibold text-sm">
+                  {{
+                    subs.subscriptionPackage.purchaseOption.billingSchedule
+                      | titlecase
+                  }}
+                </div>
+              </td>
+              <td class="px-4 py-3">
+                <div class="font-semibold text-sm">
+                  {{
+                    subs.subscriptionPackage.purchaseOption.currentPrice
+                      | currency
+                  }}
+                </div>
+              </td>
+              <td class="px-4 py-3 text-xs">
+                <span
+                  [ngClass]="subs.status === 'approved' ? 'bg-green-600' : ''"
+                  class="px-2 py-1 font-semibold leading-tight text-green-100 bg-[#d03801] rounded-full"
                 >
-                  Approve
-                </button>
-              </div>
-            </td>
-          </tr>
+                  {{ subs.status | titlecase }}
+                </span>
+              </td>
+              <td class="px-4 py-3">
+                <div class="flex items-center space-x-4 text-sm">
+                  <button
+                    type="button"
+                    [ngClass]="subs.status === 'approved' ? 'opacity-50' : ''"
+                    [disabled]="subs.status === 'approved' ? true : false"
+                    (click)="
+                      approve(
+                        subs.id,
+                        subs.subscriptionPackage.id,
+                        subs.subscriptionPackage.purchaseOption.id
+                      )
+                    "
+                    class="px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-green-800 border border-transparent rounded-md active:bg-green-600 hover:bg-green-700 focus:outline-none focus:shadow-outline-purple"
+                  >
+                    Approve
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr
+              class="text-gray-700 dark:text-gray-400"
+              *ngIf="subscriptionRequests.length === 0"
+            >
+              <td colspan="6" class="px-4 py-3 text-center">
+                No subscription packages found.
+              </td>
+            </tr>
+          </ng-container>
+          <ng-template #loadingOrError>
+            <tr>
+              <td
+                *ngIf="reqStatus() === 'loading'"
+                class="px-4 text-sm text-white text-center py-10"
+                colspan="100%"
+              >
+                <div class="lds-dual-ring"></div>
+              </td>
+              <td
+                *ngIf="reqStatus() === 'failed'"
+                class="px-4 text-sm text-white text-center py-10"
+                colspan="100%"
+              >
+                Error fetching data. Check your connection and try again.
+              </td>
+            </tr>
+          </ng-template>
         </tbody>
       </table>
     </div>

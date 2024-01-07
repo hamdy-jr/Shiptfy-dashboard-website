@@ -1,17 +1,18 @@
+import { AsyncPipe, NgForOf } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import {
   FormGroupDirective,
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { NgForOf } from '@angular/common';
-import { RegisterService } from '../register.service';
 import { Router, RouterLink } from '@angular/router';
+import { map } from 'rxjs';
+import { RegisterService } from '../register.service';
 
 @Component({
   selector: 'app-step-three',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, NgForOf, RouterLink],
+  imports: [FormsModule, ReactiveFormsModule, NgForOf, RouterLink, AsyncPipe],
   templateUrl: './step-three.component.html',
   styleUrl: './step-three.component.css',
 })
@@ -20,15 +21,13 @@ export class StepThreeComponent {
   countries: any;
   route = inject(Router);
 
-  subscriptionPackages: any;
+  subscriptionPackages$ = this.registerService
+    .getSubscriptionPackages()
+    .pipe(map((data) => data?.items));
 
   registrationForm: any;
   constructor(private rootFormGroup: FormGroupDirective) {}
   ngOnInit(): void {
-    this.registerService.getSubscriptionPackages().subscribe((data) => {
-      this.subscriptionPackages = data.items;
-      console.log(this.subscriptionPackages);
-    });
     this.registrationForm = this.rootFormGroup.form;
     this.registrationForm = this.rootFormGroup.control;
     this.registerService.getCountries().subscribe((data) => {

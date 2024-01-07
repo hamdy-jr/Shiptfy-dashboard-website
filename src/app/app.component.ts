@@ -1,17 +1,21 @@
-import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
+import { TokenService } from './authantication/token.service';
 
 @Component({
-  selector: 'app-root',
   standalone: true,
   imports: [CommonModule, RouterOutlet],
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+  selector: 'app-root',
+  template: `<router-outlet></router-outlet>`,
 })
 export class AppComponent implements OnInit {
-  route = Inject(Router);
   title = 'shiptfy';
+
+  constructor(
+    private readonly _tokenService: TokenService,
+    private readonly route: Router,
+  ) {}
 
   ngOnInit() {
     this.autoLogout();
@@ -19,8 +23,8 @@ export class AppComponent implements OnInit {
 
   autoLogout() {
     if (
-      !localStorage.getItem('accessToken') &&
-      !localStorage.getItem('refreshToken')
+      !this._tokenService.getAccessToken() &&
+      !this._tokenService.getRefreshToken()
     ) {
       this.route.navigate(['/login']);
     }

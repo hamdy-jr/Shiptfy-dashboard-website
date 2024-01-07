@@ -2056,13 +2056,13 @@ input.middle:focus {
 }
 
 @media (min-width: 1280px) {
-  .xl\:grid-cols-4 {
-    grid-template-columns:repeat(4, minmax(0, 1fr))
+  .xl\:grid-cols-4 {grid-template-columns:repeat(4, minmax(0, 1fr))
   }
 }
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
@@ -2075,4 +2075,53 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   color: #0e9f6e;
 }
 
+/*Loading Spinner*/
 
+.lds-dual-ring {
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+}
+.lds-dual-ring:after {
+  content: " ";
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border-radius: 50%;
+  border: 6px solid rgba(132, 67, 240, 0.85);
+  border-color: rgba(126, 58, 242, 0.72) transparent rgba(126, 58, 242, 0.72) transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+/*ScrollBar*/
+
+
+
+::-webkit-scrollbar-track{
+  background-color: rgb(255 255 255 / 10%);
+  border-radius: 10px
+
+}
+::-webkit-scrollbar-thumb{
+  background-color: rgba(132, 67, 240, 0.85);
+  border-radius: 10px
+}
+::-webkit-scrollbar{
+  width: 6px;
+  height: 4px;
+  background-color: rgb(255 255 255 / 10%);
+ }
+::-webkit-scrollbar-thumb:hover{
+  background-color: rgb(132, 67, 240);
+}
+::-webkit-scrollbar-thumb:active{
+  background-color: rgb(132, 67, 240);
+}

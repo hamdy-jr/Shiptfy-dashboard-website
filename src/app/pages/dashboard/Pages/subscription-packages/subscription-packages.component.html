@@ -19,73 +19,106 @@
             <th class="px-4 py-3">Actions</th>
           </tr>
         </thead>
-        <tbody
-          class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800"
-          *ngFor="let package of subscriptionPackages()"
-        >
-          <tr class="text-gray-700 dark:text-gray-400">
-            <td class="px-4 py-3">
-              <div class="font-semibold text-sm">
-                {{ package.name | titlecase }}
-              </div>
-            </td>
-            <td class="px-4 py-3">
-              <div class="font-semibold text-sm">
-                {{ package.description | titlecase }}
-              </div>
-            </td>
-            <td class="px-4 py-3">
-              <div class="font-semibold text-sm">
-                {{ package.purchaseOptions[0].originalPrice | currency }}
-              </div>
-            </td>
-            <td class="px-4 py-3">
-              <div class="font-semibold text-sm">
-                {{ package.purchaseOptions[1].originalPrice | currency }}
-              </div>
-            </td>
-            <td class="px-4 py-3">
-              <div class="font-semibold text-sm">
-                <span
-                  [ngClass]="package.active ? 'bg-green-600' : 'bg-red-600'"
-                  class="px-2 py-1 text-xs leading-tight text-green-100 rounded-full"
+        <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+          <ng-container
+            *ngIf="
+              subscriptionPackages$ | async as subscriptionPackages;
+              else loadingAndError
+            "
+          >
+            <tr
+              class="text-gray-700 dark:text-gray-400"
+              *ngFor="let package of subscriptionPackages"
+            >
+              <td class="px-4 py-3">
+                <div class="font-semibold text-sm">
+                  {{ package.name | titlecase }}
+                </div>
+              </td>
+              <td class="px-4 py-3">
+                <div class="font-semibold text-sm">
+                  {{ package.description | titlecase }}
+                </div>
+              </td>
+              <td class="px-4 py-3">
+                <div class="font-semibold text-sm">
+                  {{ package.purchaseOptions[0].originalPrice | currency }}
+                </div>
+              </td>
+              <td class="px-4 py-3">
+                <div class="font-semibold text-sm">
+                  {{ package.purchaseOptions[1].originalPrice | currency }}
+                </div>
+              </td>
+              <td class="px-4 py-3">
+                <div class="font-semibold text-sm">
+                  <span
+                    [ngClass]="package.active ? 'bg-green-600' : 'bg-red-600'"
+                    class="px-2 py-1 text-xs leading-tight text-green-100 rounded-full"
+                  >
+                    {{ package.active ? "Active" : "Inactive" }}
+                  </span>
+                </div>
+              </td>
+              <td>
+                <button
+                  type="button"
+                  class="px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-green-800 border border-transparent rounded-md active:bg-green-600 hover:bg-green-700 focus:outline-none focus:shadow-outline-purple"
                 >
-                  {{ package.active ? "Active" : "Inactive" }}
-                </span>
-              </div>
-            </td>
-            <td>
-              <button
-                type="button"
-                class="px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-green-800 border border-transparent rounded-md active:bg-green-600 hover:bg-green-700 focus:outline-none focus:shadow-outline-purple"
+                  Activate
+                </button>
+              </td>
+              <!--                  <td class="px-4 py-3">-->
+              <!--                    <div class="flex items-center space-x-4 text-sm">-->
+              <!--                      <button-->
+              <!--                        type="button"-->
+              <!--                        (click)="changeActiveStatus(skill.id, skill.active)"-->
+              <!--                        [ngClass]="-->
+              <!--                            skill.active-->
+              <!--                              ? 'bg-red-600 hover:bg-red-700'-->
+              <!--                              : 'bg-green-800 hover:bg-green-600'-->
+              <!--                          "-->
+              <!--                        class="px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 border border-transparent rounded-md active:bg-green-600 focus:outline-none focus:shadow-outline-purple"-->
+              <!--                      >-->
+              <!--                        {{ skill.active ? "Deactivate" : "Activate" }}-->
+              <!--                      </button>-->
+              <!--                      <button-->
+              <!--                        type="button"-->
+              <!--                        (click)="openEditSkillModal(skill)"-->
+              <!--                        class="px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-green-800 border border-transparent rounded-md active:bg-green-600 hover:bg-green-700 focus:outline-none focus:shadow-outline-purple"-->
+              <!--                      >-->
+              <!--                        Edit-->
+              <!--                      </button>-->
+              <!--                    </div>-->
+              <!--                  </td>-->
+            </tr>
+            <tr
+              class="text-gray-700 dark:text-gray-400"
+              *ngIf="subscriptionPackages.length === 0"
+            >
+              <td colspan="6" class="px-4 py-3 text-center">
+                No subscription packages found.
+              </td>
+            </tr>
+          </ng-container>
+          <ng-template #loadingAndError>
+            <tr>
+              <td
+                *ngIf="reqStatus() === 'loading'"
+                class="px-4 text-sm text-white text-center py-10"
+                colspan="100%"
               >
-                Activate
-              </button>
-            </td>
-            <!--                  <td class="px-4 py-3">-->
-            <!--                    <div class="flex items-center space-x-4 text-sm">-->
-            <!--                      <button-->
-            <!--                        type="button"-->
-            <!--                        (click)="changeActiveStatus(skill.id, skill.active)"-->
-            <!--                        [ngClass]="-->
-            <!--                            skill.active-->
-            <!--                              ? 'bg-red-600 hover:bg-red-700'-->
-            <!--                              : 'bg-green-800 hover:bg-green-600'-->
-            <!--                          "-->
-            <!--                        class="px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 border border-transparent rounded-md active:bg-green-600 focus:outline-none focus:shadow-outline-purple"-->
-            <!--                      >-->
-            <!--                        {{ skill.active ? "Deactivate" : "Activate" }}-->
-            <!--                      </button>-->
-            <!--                      <button-->
-            <!--                        type="button"-->
-            <!--                        (click)="openEditSkillModal(skill)"-->
-            <!--                        class="px-3 py-1 text-sm font-medium leading-5 text-white transition-colors duration-150 bg-green-800 border border-transparent rounded-md active:bg-green-600 hover:bg-green-700 focus:outline-none focus:shadow-outline-purple"-->
-            <!--                      >-->
-            <!--                        Edit-->
-            <!--                      </button>-->
-            <!--                    </div>-->
-            <!--                  </td>-->
-          </tr>
+                <div class="lds-dual-ring"></div>
+              </td>
+              <td
+                *ngIf="reqStatus() === 'failed'"
+                class="px-4 text-sm text-white text-center py-10"
+                colspan="100%"
+              >
+                Error fetching data. Check your connection and try again.
+              </td>
+            </tr>
+          </ng-template>
         </tbody>
       </table>
     </div>

@@ -1,19 +1,19 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
+  AsyncPipe,
   CurrencyPipe,
   NgClass,
   NgForOf,
+  NgIf,
   NgStyle,
   TitleCasePipe,
 } from '@angular/common';
 
 import { SubscriptionRequestService } from './subscriptionRequest.service';
-import {
-  IndexPageOfSubscriptionRequestDashboardView,
-  SubscriptionRequestDashboardView,
-  SubscriptionRequestStatus,
-} from '../../../../core/api/clients';
+import { SubscriptionRequestStatus } from '../../../../core/api/clients';
+import { catchError, map, startWith, switchMap } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-subscription-requests',
@@ -26,61 +26,42 @@ import {
     ReactiveFormsModule,
     NgStyle,
     NgClass,
+    AsyncPipe,
+    NgIf,
   ],
   templateUrl: './subscription-requests.component.html',
   styleUrl: './subscription-requests.component.css',
 })
 export class SubscriptionRequestsComponent {
   subscriptionRequestsService = inject(SubscriptionRequestService);
-  subscriptionRequests = signal<SubscriptionRequestDashboardView[]>([]);
-
-  subscriptionRequestStatusControl = new FormControl<
-    SubscriptionRequestStatus | undefined
-  >(undefined);
+  reqStatus = signal<'loading' | 'failed' | 'success'>('loading');
 
   approve(id: string, subscriptionPackageId: string, purchaseOptionId: string) {
-    this.subscriptionRequestsService
-      .approveSubscriptionRequest(
+    const approve$ =
+      this.subscriptionRequestsService.approveSubscriptionRequest(
         id,
         subscriptionPackageId,
         purchaseOptionId,
         1,
         0,
-      )
-      .subscribe(
-        (data) => {
-          this.getSubscriptionRequests();
-        },
-        (error) => {
-          console.log(error);
-        },
       );
-    this.getSubscriptionRequests();
+    approve$.subscribe();
   }
+  status = new FormControl<SubscriptionRequestStatus | undefined>(undefined);
+  status$ = this.status.valueChanges.pipe(startWith(this.status.value));
 
-  getSubscriptionRequests() {
-    return this.subscriptionRequestsService
-      .getSubscriptionRequests(
-        0,
-        10,
-        this.subscriptionRequestStatusControl.value,
-      )
-      .subscribe(
-        (data: IndexPageOfSubscriptionRequestDashboardView) => {
-          this.subscriptionRequests.set(data.items);
-        },
-        (error: any) => {
-          console.log(error);
-        },
-      );
-  }
-
-  ngOnInit() {
-    this.getSubscriptionRequests();
-  }
+  subscriptionRequests$ = this.status$.pipe(
+    switchMap((status) =>
+      this.subscriptionRequestsService
+        .getSubscriptionRequests(0, 10, status)
+        .pipe(map((data) => data.items)),
+    ),
+    tap(() => this.reqStatus.set('success')),
+    catchError(() => {
+      this.reqStatus.set('failed');
+      return [];
+    }),
+  );
 
   protected readonly SubscriptionRequestStatus = SubscriptionRequestStatus;
-  ngOnDestroy() {
-    this.getSubscriptionRequests().unsubscribe();
-  }
 }

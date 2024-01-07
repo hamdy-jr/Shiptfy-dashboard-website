@@ -18,12 +18,12 @@
           <!-- Main modal -->
           @if (isPostJobModelOpen()){
           <div
-            class="fixed inset-0 rounded-lg bg-gray-600 bg-opacity-50 z-50 h-full w-full max-h-full"
+            class="fixed inset-0 rounded-lg bg-gray-600 bg-opacity-50 z-50 w-full h-full top-0 bottom-0"
             #model
           >
-            <div class="relative m-auto my-10 p-4 w-full max-w-md max-h-full">
+            <div class="m-auto my-10 p-4 max-w-md">
               <!-- Modal content -->
-              <div class="relative rounded-lg shadow dark:bg-gray-700">
+              <div class="rounded-lg shadow dark:bg-gray-700">
                 <!-- Modal header -->
                 <div
                   class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600"
@@ -57,7 +57,10 @@
                   </button>
                 </div>
                 <!-- Modal body -->
-                <form class="p-4 md:p-5" [formGroup]="postJobForm">
+                <form
+                  class="p-4 md:p-5 overflow-y-scroll max-h-[75vh]"
+                  [formGroup]="postJobForm"
+                >
                   <div class="grid gap-4 mb-4 grid-cols-2">
                     <div class="col-span-2">
                       <label
@@ -239,7 +242,7 @@
         </thead>
         <tbody
           class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800"
-          *ngFor="let headHunt of headHunts()"
+          *ngFor="let headHunt of headHunt$ | async"
         >
           <tr class="text-gray-700 dark:text-gray-400">
             <td class="px-4 py-3">

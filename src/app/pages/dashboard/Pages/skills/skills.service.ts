@@ -15,7 +15,7 @@ export class SkillsService {
     });
   }
   getSkills() {
-    return this.skillClient.getDashboardViewPage(0, 10, undefined);
+    return this.skillClient.getDashboardViewPage(0, 20, undefined);
   }
   changeActiveStatus(id: string, active: boolean) {
     return this.skillClient.active({ id, active });

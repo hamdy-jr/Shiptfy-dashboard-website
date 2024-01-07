@@ -1,40 +1,55 @@
 import { HttpInterceptorFn } from '@angular/common/http';
-import { catchError, retry, switchMap, throwError } from 'rxjs';
 import { inject } from '@angular/core';
+import { catchError, of, switchMap, throwError } from 'rxjs';
+import { RefreshService } from './refresh.service';
+import { TokenService } from './token.service';
 
-import { AuthorizationsClient, RefreshAccessToken } from '../core/api/clients';
+const refreshPath = '/authentications/refresh';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  const authorizationsClient = inject(AuthorizationsClient);
+  const tokenService = inject(TokenService);
+  const refreshService = inject(RefreshService);
 
-  let accessToken = localStorage.getItem('accessToken');
-  const getRefreshToken = localStorage.getItem('refreshToken');
-  const refreshToken: RefreshAccessToken = {
-    token: getRefreshToken as string,
-  };
+  var url = new URL(req.url);
 
-  const authReq = req.clone({
-    headers: req.headers.set('Authorization', 'Bearer ' + accessToken),
-  });
-  return next(authReq).pipe(
-    retry(1),
-    catchError((error) => {
-      if (error.status === 401) {
-        return authorizationsClient.refresh(refreshToken).pipe(
-          switchMap((res) => {
-            localStorage.setItem('accessToken', res.accessToken);
-            localStorage.setItem('refreshToken', res.refreshToken);
-            const retryReq = req.clone({
-              headers: req.headers.set(
-                'Authorization',
-                'Bearer ' + res.accessToken,
-              ),
-            });
-            return next(retryReq);
-          }),
-        );
-      }
-      return throwError(error);
-    }),
+  if (url.pathname === refreshPath) {
+    return next(req);
+  }
+
+  const accessToken = tokenService.getAccessToken();
+
+  if (!accessToken) {
+    return next(req);
+  }
+
+  return (refreshService.currentRefreshToken ?? of(void null)).pipe(
+    switchMap(() => {
+      const newReq = req.clone({
+        headers: req.headers.set('Authorization', 'Bearer ' + accessToken),
+      });
+
+      return next(newReq).pipe(
+        catchError((originalError) => {
+          if (originalError?.status !== 401) {
+            return throwError(() => originalError);
+          }
+
+          return refreshService.refreshToken(originalError).pipe(
+            switchMap(() => {
+              const newAccessToken = tokenService.getAccessToken();
+
+              const retryReq = req.clone({
+                headers: req.headers.set(
+                  'Authorization',
+                  'Bearer ' + newAccessToken
+                ),
+              });
+
+              return next(retryReq);
+            })
+          );
+        })
+      );
+    })
   );
 };

@@ -25,7 +25,7 @@
                 </h3>
                 <ul
                   class="grid w-full gap-6 items-center justify-center"
-                  *ngFor="let sub of subscriptionPackages"
+                  *ngFor="let sub of subscriptionPackages$ | async"
                 >
                   <li class="w-full">
                     <input

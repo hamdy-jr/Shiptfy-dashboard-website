@@ -1,3 +1,4 @@
+import { NgIf, NgOptimizedImage } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import {
   FormControl,
@@ -6,7 +7,6 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { NgIf, NgOptimizedImage } from '@angular/common';
 
 import { LoginService } from './login.service';
 
@@ -21,7 +21,6 @@ import { LoginService } from './login.service';
 export class LoginComponent {
   loginService = inject(LoginService);
   route = inject(Router);
-  isSubmitted = false;
 
   loginForm = new FormGroup({
     identifier: new FormControl<string>('', {
@@ -36,25 +35,27 @@ export class LoginComponent {
 
   onSubmit() {
     console.log(this.loginForm.value);
-    if (this.loginForm.valid) {
-      this.loginService
-        .onLogin(
-          this.loginForm.controls.identifier.value as string,
-          this.loginForm.controls.password.value as string,
-        )
-        .subscribe((res) => {
-          console.log(res);
-          localStorage.setItem('accessToken', res.accessToken);
-          localStorage.setItem('refreshToken', res.refreshToken);
-          localStorage.setItem('type', res.user.type);
-          console.log('Logged in!');
-          if (res.user?.type === 'administrator') {
-            this.route.navigate(['/dashboard']);
-          } else {
-            this.route.navigate(['/app-view']);
-          }
-        });
+
+    if (!this.loginForm.valid) {
+      return;
     }
-    this.isSubmitted = true;
+
+    this.loginService
+      .onLogin(
+        this.loginForm.controls.identifier.value as string,
+        this.loginForm.controls.password.value as string,
+      )
+      .subscribe((res) => {
+        console.log(res);
+        localStorage.setItem('accessToken', res.accessToken);
+        localStorage.setItem('refreshToken', res.refreshToken);
+        localStorage.setItem('type', res.user.type);
+        console.log('Logged in!');
+        if (res.user?.type === 'administrator') {
+          this.route.navigate(['/dashboard']);
+        } else {
+          this.route.navigate(['/app-view']);
+        }
+      });
   }
 }

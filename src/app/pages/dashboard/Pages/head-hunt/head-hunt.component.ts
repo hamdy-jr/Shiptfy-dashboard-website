@@ -6,7 +6,7 @@ import {
   signal,
   ViewChild,
 } from '@angular/core';
-import { DatePipe, NgForOf, TitleCasePipe } from '@angular/common';
+import { AsyncPipe, DatePipe, NgForOf, TitleCasePipe } from '@angular/common';
 import {
   FormArray,
   FormControl,
@@ -15,12 +15,12 @@ import {
 } from '@angular/forms';
 
 import { HeadHuntService } from './head-hunt.service';
-import { HeadhuntJobDashboardView } from '../../../../core/api/clients';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-head-hunt',
   standalone: true,
-  imports: [NgForOf, ReactiveFormsModule, TitleCasePipe, DatePipe],
+  imports: [NgForOf, ReactiveFormsModule, TitleCasePipe, DatePipe, AsyncPipe],
   templateUrl: './head-hunt.component.html',
   styleUrl: './head-hunt.component.css',
 })
@@ -28,7 +28,6 @@ export class HeadHuntComponent {
   @ViewChild('model') model!: ElementRef;
   headHuntService = inject(HeadHuntService);
   isPostJobModelOpen = signal(false);
-  headHunts = signal<HeadhuntJobDashboardView[]>([]);
 
   postJobForm = new FormGroup({
     title: new FormControl<string>(''),
@@ -46,12 +45,11 @@ export class HeadHuntComponent {
       }
     });
   }
-  ngOnInit() {
-    this.headHuntService.getHeadHunts().subscribe((data) => {
-      this.headHunts.set(data.items);
-      console.log(this.headHunts());
-    });
-  }
+
+  headHunt$ = this.headHuntService
+    .getHeadHunts()
+    .pipe(map((data) => data.items));
+
   openPostJobModel() {
     this.isPostJobModelOpen.set(true);
   }

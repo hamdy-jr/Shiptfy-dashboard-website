@@ -1,6 +1,5 @@
-import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { inject, Injectable } from '@angular/core';
 import { AuthorizationsClient } from '../../../core/api/clients';
 
 @Injectable({
@@ -9,7 +8,6 @@ import { AuthorizationsClient } from '../../../core/api/clients';
 export class LoginService {
   http = inject(HttpClient);
   authorizationsClient = inject(AuthorizationsClient);
-  onInit() {}
 
   onLogin(identifier: string, password: string) {
     return this.authorizationsClient.credentialLogin({

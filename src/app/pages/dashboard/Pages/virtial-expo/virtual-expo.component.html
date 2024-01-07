@@ -3,7 +3,6 @@
 
 <app-add-photo-model
   (isUploadPhotoModalOpen)="closeUploadPhotoModal($event)"
-  (updateVirtualExpoPosts)="updateVirtualExpoPosts($event)"
 ></app-add-photo-model
 >}
 <div class="container px-6 mx-auto grid">
@@ -21,11 +20,31 @@
       </button>
     </div>
     <div class="grid gap-6 mb-8 md:grid-cols-2">
-      <div *ngFor="let virtual of virtualExpoPosts()">
-        <div class="min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
+      <ng-container
+        *ngIf="
+          virtualExpoPosts$ | async as virtualExpoPosts;
+          else loadingOrError
+        "
+      >
+        <div
+          class="min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800"
+          *ngFor="let virtual of virtualExpoPosts"
+        >
           <app-panorama-viewer [virtualExpo]="virtual"></app-panorama-viewer>
         </div>
-      </div>
+      </ng-container>
+      <ng-template #loadingOrError>
+        <div class="w-full col-span-2 text-center py-20">
+          <div *ngIf="reqStatus() === 'loading'">
+            <div class="lds-dual-ring"></div>
+          </div>
+          <div *ngIf="reqStatus() === 'failed'">
+            <p class="px-4 text-sm text-white text-center">
+              Error fetching data. Check your connection and try again.
+            </p>
+          </div>
+        </div>
+      </ng-template>
     </div>
   </div>
 </div>

@@ -1,11 +1,11 @@
-import { Component, Input } from '@angular/core';
+import { NgIf } from '@angular/common';
+import { Component } from '@angular/core';
 import {
-  FormControl,
+  FormGroup,
   FormGroupDirective,
   ReactiveFormsModule,
 } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-step-one',
@@ -15,9 +15,9 @@ import { NgIf } from '@angular/common';
   styleUrl: './step-one.component.css',
 })
 export class StepOneComponent {
-  form: any;
-  constructor(private rootFormGroup: FormGroupDirective) {}
-  ngOnInit(): void {
+  form: FormGroup<any>;
+
+  constructor(private rootFormGroup: FormGroupDirective) {
     this.form = this.rootFormGroup.control;
   }
 }

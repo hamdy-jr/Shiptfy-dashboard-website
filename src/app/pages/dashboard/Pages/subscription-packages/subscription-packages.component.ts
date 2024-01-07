@@ -1,8 +1,17 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CurrencyPipe, NgClass, NgForOf, TitleCasePipe } from '@angular/common';
+import {
+  AsyncPipe,
+  CurrencyPipe,
+  NgClass,
+  NgForOf,
+  NgIf,
+  TitleCasePipe,
+} from '@angular/common';
 import { SubscriptionPackagesService } from './subscription-packages.service';
 import { SubscriptionPackageDashboardView } from '../../../../core/api/clients';
+import { catchError, map } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-subscription-packages',
@@ -14,25 +23,24 @@ import { SubscriptionPackageDashboardView } from '../../../../core/api/clients';
     TitleCasePipe,
     CurrencyPipe,
     NgClass,
+    AsyncPipe,
+    NgIf,
   ],
   templateUrl: './subscription-packages.component.html',
   styleUrl: './subscription-packages.component.css',
 })
 export class SubscriptionPackagesComponent {
   subscriptionPackagesService = inject(SubscriptionPackagesService);
-  subscriptionPackages = signal<SubscriptionPackageDashboardView[]>([]);
+  reqStatus = signal<'loading' | 'failed' | 'success'>('loading');
 
-  getSubscriptionPackages() {
-    return this.subscriptionPackagesService
-      .getSubscriptionPackages()
-      .subscribe((data) => {
-        this.subscriptionPackages.set(data.items);
-      });
-  }
-  ngOnInit() {
-    this.getSubscriptionPackages();
-  }
-  ngOnDestroy() {
-    this.getSubscriptionPackages().unsubscribe();
-  }
+  subscriptionPackages$ = this.subscriptionPackagesService
+    .getSubscriptionPackages()
+    .pipe(
+      map((data) => data.items),
+      tap(() => this.reqStatus.set('success')),
+      catchError((err) => {
+        this.reqStatus.set('failed');
+        throw err;
+      }),
+    );
 }

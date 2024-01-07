@@ -3,6 +3,7 @@ import {
   ElementRef,
   EventEmitter,
   inject,
+  OnDestroy,
   Output,
   Renderer2,
   ViewChild,
@@ -17,6 +18,7 @@ import { NgIf } from '@angular/common';
 
 import { VirtualService } from '../virtual.service';
 import { FileParameter } from '../../../../../core/api/clients';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-add-photo-model',
@@ -25,13 +27,12 @@ import { FileParameter } from '../../../../../core/api/clients';
   templateUrl: './add-photo-model.component.html',
   styleUrl: './add-photo-model.component.css',
 })
-export class AddPhotoModelComponent {
+export class AddPhotoModelComponent implements OnDestroy {
   @Output() isUploadPhotoModalOpen = new EventEmitter<boolean>();
-  @Output() updateVirtualExpoPosts = new EventEmitter<any>();
   @ViewChild('model') model!: ElementRef;
   imageSrc: any;
   virtualExpoPosts: any;
-
+  subscription: Subscription | undefined;
   virtualService = inject(VirtualService);
   constructor(private renderer: Renderer2) {
     this.renderer.listen('window', 'click', (e: Event) => {
@@ -48,8 +49,9 @@ export class AddPhotoModelComponent {
     description: new FormControl<string>('', Validators.required),
     link: new FormControl('', Validators.required),
   });
+
   onSubmit() {
-    this.virtualService
+    this.subscription = this.virtualService
       .add(
         1,
         this.addPhotoForm.value.title as string,
@@ -65,13 +67,8 @@ export class AddPhotoModelComponent {
         ],
       )
       .subscribe((res) => {
-        console.log(res);
         this.isUploadPhotoModalOpen.emit(false);
       });
-    this.virtualService.getVirtualExpoPosts().subscribe((res) => {
-      this.virtualExpoPosts = res.items;
-    });
-    this.updateVirtualExpoPosts.emit(this.virtualExpoPosts);
   }
   closeUploadPhotoModal() {
     this.isUploadPhotoModalOpen.emit(false);
@@ -89,5 +86,8 @@ export class AddPhotoModelComponent {
 
       reader.readAsDataURL(file);
     }
+  }
+  ngOnDestroy() {
+    this.subscription?.unsubscribe();
   }
 }
